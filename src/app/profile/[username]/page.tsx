@@ -6,22 +6,34 @@ import {
 } from "@/actions/profile.action";
 import { notFound } from "next/navigation";
 import ProfilePageClient from "./ProfilePageClient";
+import type { Metadata } from "next";
 
+type PageProps = {
+  params: {
+    username: string;
+  };
+};
+
+// ✅ Metadata jeneratörü
 export async function generateMetadata({
   params,
-}: {
-  params: { username: string };
-}) {
+}: PageProps): Promise<Metadata> {
   const user = await getProfileByUsername(params.username);
-  if (!user) return;
+
+  if (!user) {
+    return {
+      title: "User Not Found",
+      description: "This user does not exist.",
+    };
+  }
 
   return {
-    title: `${user.name ?? user.username}`,
+    title: user.name ?? user.username,
     description: user.bio || `Check out ${user.username}'s profile.`,
   };
 }
 
-async function ProfilePageServer({ params }: { params: { username: string } }) {
+export default async function ProfilePage({ params }: PageProps) {
   const user = await getProfileByUsername(params.username);
 
   if (!user) notFound();
@@ -41,4 +53,3 @@ async function ProfilePageServer({ params }: { params: { username: string } }) {
     />
   );
 }
-export default ProfilePageServer;
