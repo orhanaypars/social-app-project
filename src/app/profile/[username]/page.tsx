@@ -14,19 +14,13 @@ type PageProps = {
   };
 };
 
-// ✅ Metadata jeneratörü
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const user = await getProfileByUsername(params.username);
-
+  const user = await getProfileByUsername((params as any).username);
   if (!user) {
-    return {
-      title: "User Not Found",
-      description: "This user does not exist.",
-    };
+    notFound();
   }
-
   return {
     title: user.name ?? user.username,
     description: user.bio || `Check out ${user.username}'s profile.`,
@@ -34,8 +28,7 @@ export async function generateMetadata({
 }
 
 export default async function ProfilePage({ params }: PageProps) {
-  const user = await getProfileByUsername(params.username);
-
+  const user = await getProfileByUsername((params as any).username);
   if (!user) notFound();
 
   const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
