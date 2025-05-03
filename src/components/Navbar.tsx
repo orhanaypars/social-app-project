@@ -15,9 +15,9 @@ async function Navbar() {
           <div className="flex items-center">
             <Link
               href="/"
-              className="text-xl font-bold text-primary font-mono tracking-wider"
+              className="text-2xl font-bold text-primary font-mono tracking-wider"
             >
-              Socially
+              sosyalmedya.pro 
             </Link>
           </div>
 
